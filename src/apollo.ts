@@ -1,9 +1,38 @@
-import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client";
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  makeVar,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { LOCALSTORAGE_TOKEN } from "./constant";
 
-export const isLoggedInVar = makeVar(false);
+const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
+export const isLoggedInVar = makeVar(Boolean(token));
+export const authTokenVar = makeVar(token);
+
+// console.log("default value of isLoggedInVar:", isLoggedInVar());
+// console.log("default value of authToken:", authToken());
+
+const httpLink = createHttpLink({
+  uri:
+    process.env.NODE_ENV === "production"
+      ? "https://nuber-eats-backend.herokuapp.com/graphql"
+      : "http://localhost:5000/graphql",
+});
+
+const authLink = setContext((_, { headers }) => {
+  console.log(headers);
+  return {
+    headers: {
+      ...headers,
+      "x-jwt": authTokenVar() || "",
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -11,6 +40,11 @@ const client = new ApolloClient({
           isLoggedIn: {
             read() {
               return isLoggedInVar();
+            },
+          },
+          token: {
+            read() {
+              return authTokenVar();
             },
           },
         },
