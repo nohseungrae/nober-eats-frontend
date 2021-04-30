@@ -27,17 +27,26 @@ export const EditProfile = () => {
             editProfile: { ok },
         } = data;
 
-        if (ok && userData?.me.id) {
-            client.writeFragment({
-                id: `User${userData.me.id}`,
-                fragment: gql`
-                    fragment EditedUser on User
-                `,
-                data: {
-                    email: '',
-                    verified: false,
-                },
-            });
+        if (ok && userData) {
+            const {
+                me: { email: prevEmail, id },
+            } = userData;
+            const { email: newEmail } = getValues();
+            if (prevEmail !== newEmail) {
+                client.writeFragment({
+                    id: `User${id}`,
+                    fragment: gql`
+                        fragment EditedUser on User {
+                            email
+                            verified
+                        }
+                    `,
+                    data: {
+                        email: newEmail,
+                        verified: false,
+                    },
+                });
+            }
         }
     };
     const [editProfile, { loading }] = useMutation<editProfile, editProfileVariables>(EDIT_PROFILE_MUTATION);
