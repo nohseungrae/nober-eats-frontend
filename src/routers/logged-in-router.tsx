@@ -41,7 +41,7 @@ export const LoggedInRouter: React.FC = () => {
         <Router>
             <Header />
             <Switch>
-                {data.me.role === UserRole.client && ClientRoutes}
+                {data.me.role === UserRole.Client && ClientRoutes}
                 <Redirect to="/" />
                 <Route>
                     <NotFound />

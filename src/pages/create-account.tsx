@@ -35,7 +35,7 @@ export const CreateAccount = () => {
     } = useForm<ICreateAccountForm>({
         mode: 'onChange',
         defaultValues: {
-            role: UserRole.client,
+            role: UserRole.Client,
         },
     });
     const history = useHistory();
@@ -90,7 +90,8 @@ export const CreateAccount = () => {
                     <input
                         ref={register({
                             required: '이메일을 입력하여 주세요.',
-                            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            pattern:
+                                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                         })}
                         name="email"
                         required

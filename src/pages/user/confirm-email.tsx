@@ -38,7 +38,7 @@ export const ConfirmEmail = () => {
         }
     };
 
-    const [verifyEmail] = useMutation<verifyEmail, verifyEmailVariables>(VERIFY_EMAIL_MUTATION);
+    const [verifyEmail] = useMutation<verifyEmail, verifyEmailVariables>(VERIFY_EMAIL_MUTATION, { onCompleted });
     useEffect(() => {
         const [_, code] = window.location.href.split('code=');
         //여기서 home으로 갔음에도 불구하고 업데이트를 하려 하기 때문에 warning이 일어남
